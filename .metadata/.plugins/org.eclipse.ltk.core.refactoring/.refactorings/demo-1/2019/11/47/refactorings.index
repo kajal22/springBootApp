@@ -1,0 +1,10 @@
+1574252205196	Rename type 'services'
+1574252225716	Rename type 'userServices'
+1574256295383	Rename package 'com.example.demo.dto'
+1574314077248	Rename type 'UserModel'
+1574321380531	Rename type 'PasswordEncoder'
+1574326247656	Rename method 'encode'
+1574335354983	Rename package 'com.example.demo.registerdto'
+1574335487682	Move compilation unit
+1574335494259	Delete element
+1574342577949	Rename type 'Emailsend'

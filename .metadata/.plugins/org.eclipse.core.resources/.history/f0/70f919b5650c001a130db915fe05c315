@@ -1,0 +1,16 @@
+package com.example.demo.utility;
+
+import org.springframework.mail.SimpleMailMessage;
+
+public class EmailSend {
+	public SimpleMailMessage sendMail() {
+		System.out.println("inside mail");
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("kajalc268@gmail.com");     
+		message.setTo("kajalchoudhary705@gmail.com");
+		       message.setText("FATAL - Application crash. Save your job !!");
+		       message.setSubject("<html><h2>Email verification for fundoo account</h2></html>");
+		       System.out.println("hello "+message.toString());
+		       return message;
+		}
+}

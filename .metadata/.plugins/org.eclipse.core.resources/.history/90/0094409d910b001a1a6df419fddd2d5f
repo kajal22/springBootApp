@@ -1,0 +1,10 @@
+package com.example.demo.services;
+
+public class UserServices {
+
+	public String registration() {
+		// TODO Auto-generated method stub
+		return "KAJAL";
+	}
+
+}
