@@ -1,9 +1,11 @@
 package com.example.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.config.Passwordconfig;
+import com.example.demo.dto.forgetPasswordDTO;
 import com.example.demo.dto.loginDTO;
 import com.example.demo.dto.registrationDTO;
 import com.example.demo.model.User;
@@ -19,41 +21,60 @@ public class UserServices {
 
 	@Autowired
 	private Passwordconfig passwordconfig;
-	
+
 	@Autowired
 	private EmailSend emailSend;
+
+	@Autowired
+	private JavaMailSender sender;
 
 	/**
 	 * @param registrationData
 	 * @return
 	 */
-	
+
 	public Response registration(registrationDTO registrationData) {
-		User model = new User();
-		model.setEmail(registrationData.getEmail());
-		model.setFirstName(registrationData.getFirstName());
-		model.setLastName(registrationData.getLastName());
-		System.out.println(model.toString() + "services");
-		model.setPassword(passwordconfig.getPasswordEncoder().encode(registrationData.getPassword()));
-		userRepository.save(model);
-	    String email=registrationData.getEmail();
-		emailSend.sendMail();
-		return new Response(200, "successfully register", true);
+		User user = userRepository.findByEmail(registrationData.getEmail()).orElse(null);
+		if (user == null) {
+			User model = new User();
+			model.setEmail(registrationData.getEmail());
+			model.setFirstName(registrationData.getFirstName());
+			model.setLastName(registrationData.getLastName());
+			System.out.println(model.toString() + "services");
+			model.setPassword(passwordconfig.getPasswordEncoder().encode(registrationData.getPassword()));
+			userRepository.save(model);
+			String email = registrationData.getEmail();
+			SimpleMailMessage msg = emailSend.sendMail(email);
+			sender.send(msg);
+			return new Response(200, "successfully register", true);
+		}
+		return new Response(400, "user already available", false);
+
 	}
 
 	/**
 	 * @param loginData
 	 * @return
 	 */
-	
+
 	public Response login(loginDTO loginData) {
 		User user = userRepository.findByEmail(loginData.getEmail()).orElse(null);
-		if (user != null) {
-			boolean b = passwordconfig.getPasswordEncoder().matches(loginData.getPassword(), user.getPassword());
-			return new Response(200, "successfully Login", b);
+		if (user == null) {
+			return new Response(400, "user not found", false);
 		}
-		return new Response(200, "user not found", false);
 
+		boolean b = passwordconfig.getPasswordEncoder().matches(loginData.getPassword(), user.getPassword());
+		if (!b) {
+			return new Response(400, "password does not match", false);
+		}
+		return new Response(200, "login successfull", true);
 	}
 
+	public Response forgetPassword(forgetPasswordDTO forgetPasswordData) {
+		User user = userRepository.findByEmail(forgetPasswordData.getEmail()).orElse(null);
+		String email = forgetPasswordData.getEmail();
+		SimpleMailMessage msg = emailSend.sendMailReset(email);
+		sender.send(msg);
+		return new Response(200, "successfully mail sent", true);
+	}
 }

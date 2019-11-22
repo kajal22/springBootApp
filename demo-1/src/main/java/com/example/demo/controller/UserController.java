@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.forgetPasswordDTO;
 import com.example.demo.dto.loginDTO;
 import com.example.demo.dto.registrationDTO;
 import com.example.demo.model.User;
@@ -31,6 +32,12 @@ public class UserController {
 	public Response login(@RequestBody loginDTO loginData) {
 		System.out.println("into login");
 	return userServices.login(loginData);
+	
+}	
+	@PostMapping("/forgetPassword")
+	public Response forgetPassword(@RequestBody forgetPasswordDTO forgetPasswordData) {
+		System.out.println("into forget");
+	return userServices.forgetPassword(forgetPasswordData);
 	
 }	
 	
