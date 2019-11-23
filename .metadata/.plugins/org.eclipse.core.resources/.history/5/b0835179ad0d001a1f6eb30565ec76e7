@@ -1,0 +1,11 @@
+package com.example.demo.utility;
+
+public class tokenGenerate {
+	public String createToken(Long Id) {
+
+	       return Jwts.builder()
+	               .setSubject(String.valueOf(Id))
+	               .signWith(SignatureAlgorithm.HS512, "secret")
+	               .compact();
+	   }
+}

@@ -4,11 +4,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 @Component
 public class EmailSend {
-	public SimpleMailMessage sendMail(String email) {
+	public SimpleMailMessage sendMail(String email,String token) {
 		System.out.println("inside mail");
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(email);
-		       message.setText("send link for verification !!");
+		       message.setText("send link for verification !!"+"http://localhost:8082"+token);
 		       message.setSubject("Email verification for fundoo account");
 		       System.out.println("hello "+message.toString());
 		       return message;
